@@ -124,6 +124,16 @@ const menuOptions = [
       { label: '提示词管理', key: 'prompt', icon: () => h(Icon, { icon: 'mdi:comment-text-multiple-outline', width: '20', height: '20' }) },
       { label: '会话管理', key: 'session', icon: () => h(Icon, { icon: 'mdi:chat-processing-outline', width: '20', height: '20' }) }
     ]
+  },
+  // ==================== Agent 管理 ====================
+  {
+    label: 'Agent 管理',
+    key: 'agent',
+    icon: () => h(Icon, { icon: 'mdi:brain', width: '20', height: '20' }),
+    children: [
+      { label: '记忆管理', key: 'agent-memory', icon: () => h(Icon, { icon: 'mdi:memory', width: '20', height: '20' }) },
+      { label: '反馈分析', key: 'agent-feedback', icon: () => h(Icon, { icon: 'mdi:thumbs-up-down-outline', width: '20', height: '20' }) }
+    ]
   }
 ]
 
@@ -132,7 +142,8 @@ const allMenuKeys = [
   'dashboard',
   'company', 'department', 'employee', 'user',
   'order', 'standard', 'approval',
-  'rag', 'policy', 'prompt', 'session'
+  'rag', 'policy', 'prompt', 'session',
+  'agent-memory', 'agent-feedback'
 ]
 
 const router = useRouter()

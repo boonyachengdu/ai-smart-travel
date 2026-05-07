@@ -3,12 +3,15 @@ spring:
     active: dev,mcp-server,mcp-client
   application:
     name: travel-dialog
+  autoconfigure:
+    exclude:
+      # 移除openai配置
+      - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
   ai:
     openai:
-      api-key: xxxxxxxxxxxxxxxxxxxxxx
+      api-key: disabled
       chat:
-        options:
-          model: gpt-3.5-turbo
+        enabled: false
     dashscope:
       api-key: sk-147790c3aaf04f8c95834f4e92f92dc1
       chat:

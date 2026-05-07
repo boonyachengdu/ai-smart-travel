@@ -98,7 +98,9 @@ const menuOptions = [
   { label: '流程审批', key: 'approval' },
   { label: 'RAG 知识库', key: 'rag' },
   { label: '提示词管理', key: 'prompt' },
-  { label: '会话管理', key: 'session' }
+  { label: '会话管理', key: 'session' },
+  { label: 'Agent 记忆', key: 'agent-memory' },
+  { label: 'Agent 反馈', key: 'agent-feedback' }
 ]
 
 const handleUpdateValue = (key: string) => {

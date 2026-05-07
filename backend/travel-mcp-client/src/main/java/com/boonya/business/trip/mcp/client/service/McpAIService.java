@@ -1,7 +1,6 @@
 package com.boonya.business.trip.mcp.client.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.var;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.tool.ToolCallbackProvider;

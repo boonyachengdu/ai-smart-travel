@@ -1,6 +1,19 @@
 spring:
   application:
     name: travel-order
+  ai:
+    openai:
+      api-key: disabled
+      chat:
+        enabled: false
+    model:
+      chat: none          # 禁用聊天模型[reference:4]
+      embedding: none     # 禁用嵌入模型
+      image: none         # 禁用图像生成模型
+      moderation: none    # 禁用审核模型
+      audio:
+        speech: none          # 禁用语音模型
+        transcription: none   # 禁用转录模型
   cloud:
     nacos:
       discovery:

@@ -1,8 +1,16 @@
 spring:
   application:
     name: travel-rag
+  autoconfigure:
+    exclude:
+      # 移除openai配置
+      - org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
     # Spring AI 通义千问配置（最关键）
   ai:
+    openai:
+      api-key: disabled
+      chat:
+        enabled: false
     dashscope:
       api-key: sk-147790c3aaf04f8c95834f4e92f92dc1   # 必须，你的通义千问 API Key
       chat:

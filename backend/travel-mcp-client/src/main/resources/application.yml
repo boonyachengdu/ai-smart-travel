@@ -1,6 +1,13 @@
 spring:
   application:
-    name: travel-mcp-server
+    name: travel-mcp-client
   ai:
     dashscope:
-      api-key: xxxxxx-hsfuihsf-dshfdsf
+      api-key: sk-147790c3aaf04f8c95834f4e92f92dc1
+      chat:
+        options:
+          # ??????
+          model: qwen-plus                         # ? qwen-max?qwen-plus
+      embedding:
+        options:
+          model: text-embedding-v3

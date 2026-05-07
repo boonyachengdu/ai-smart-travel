@@ -42,6 +42,7 @@
 		<springdoc.version>2.6.0</springdoc.version>
 		<spring-ai.version>1.0.0-M6</spring-ai.version>
 		<spring-ai-mcp.version>2.0.0-M4</spring-ai-mcp.version>
+		<!--<spring-ai-mcp.version>0.6.0</spring-ai-mcp.version>-->
 		<spring-ai-alibaba.version>1.0.0-M6.1</spring-ai-alibaba.version>
 	</properties>
 
@@ -175,6 +176,16 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

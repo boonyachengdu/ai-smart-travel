@@ -5,7 +5,7 @@
       <van-nav-bar title="智能差旅助手" />
 
       <div class="scene-list">
-        <van-grid :column-num="2" clickable>
+        <van-grid :column-num="3" clickable>
           <van-grid-item
               v-for="scene in scenes"
               :key="scene.name"
@@ -42,24 +42,30 @@ const activeTab = ref('home')
 
 const scenes = [
   {
+    name: 'default',
+    title: 'Agent 智能问答',
+    bg: flightBg,
+    icon: '🤖',
+  },
+  {
     name: 'flight',
     title: '机票预订',
-    bg: flightBg,  // 机场候机大厅（真实）
+    bg: flightBg,
   },
   {
     name: 'hotel',
     title: '酒店预订',
-    bg: hotelBg,  // 豪华酒店房间（真实）
+    bg: hotelBg,
   },
   {
     name: 'train',
     title: '火车票预订',
-    bg: trainBg,  // 高铁车厢内部（真实）
+    bg: trainBg,
   },
   {
     name: 'car',
     title: '用车服务',
-    bg: carBg,  // 商务轿车行驶中（真实）
+    bg: carBg,
   },
 ]
 

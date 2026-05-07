@@ -14,6 +14,8 @@ import RagFileView from '@/views/rag/ragFileView.vue'
 import PolicyView from '@/views/rag/policyView.vue'
 import PromptView from '@/views/rag/promptView.vue'
 import SessionView from '@/views/dialog/sessionView.vue'
+import AgentMemoryView from '@/views/agent/agentMemoryView.vue'
+import AgentFeedbackView from '@/views/agent/agentFeedbackView.vue'
 import RegisterView from "@/views/auth/registerView.vue";
 
 const routes = [
@@ -106,6 +108,18 @@ const routes = [
                 name: 'Session',
                 component: SessionView,
                 meta: {title: '会话管理'}
+            },
+            {
+                path: '/agent-memory',
+                name: 'AgentMemory',
+                component: AgentMemoryView,
+                meta: {title: 'Agent记忆管理'}
+            },
+            {
+                path: '/agent-feedback',
+                name: 'AgentFeedback',
+                component: AgentFeedbackView,
+                meta: {title: 'Agent反馈分析'}
             },
         ]
     }
