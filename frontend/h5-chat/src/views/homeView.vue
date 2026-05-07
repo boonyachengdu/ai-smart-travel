@@ -42,7 +42,7 @@ const activeTab = ref('home')
 
 const scenes = [
   {
-    name: 'default',
+    name: 'qa',
     title: 'Agent 智能问答',
     bg: flightBg,
     icon: '🤖',
