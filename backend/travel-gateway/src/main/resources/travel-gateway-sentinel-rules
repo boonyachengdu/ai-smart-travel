@@ -1,0 +1,21 @@
+[
+  {
+    "resource": "travel-user",           // route id（方式一/二中的 id）
+    "resourceMode": 0,                    // 0 = route级别，1 = api group级别
+    "grade": 1,                           // 1=QPS, 0=线程数
+    "count": 10,                          // 阈值
+    "intervalSec": 1,
+    "controlBehavior": 0,                 // 0=快速失败, 1=Warm Up, 2=排队等待
+    "burst": 20,                          // 突发容量（类似 burstCapacity）
+    "maxQueueingTimeoutMs": 500,
+    "limitApp": "default"
+  },
+  {
+    "resource": "/users/**",              // 自定义 API 分组（需先定义 api-group）
+    "resourceMode": 1,
+    "grade": 1,
+    "count": 5,
+    "intervalSec": 1,
+    "controlBehavior": 0
+  }
+]

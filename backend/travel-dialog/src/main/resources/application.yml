@@ -1,0 +1,71 @@
+spring:
+  profiles:
+    active: dev,mcp-server,mcp-client
+  application:
+    name: travel-dialog
+  ai:
+    openai:
+      api-key: xxxxxxxxxxxxxxxxxxxxxx
+      chat:
+        options:
+          model: gpt-3.5-turbo
+    dashscope:
+      api-key: sk-147790c3aaf04f8c95834f4e92f92dc1
+      chat:
+        options:
+          # 支持模型降级
+          model: qwen-plus                         # 或 qwen-max、qwen-plus
+      embedding:
+        options:
+          model: text-embedding-v3
+    mcp:
+      server:
+        enabled: true
+        protocol: SSE
+        sse-endpoint: /api/mcp/sse
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml
+        refresh-enabled: true
+        import-check:
+          enabled: false
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 100
+          max-idle: 8
+          max-wait: -1
+          min-idle: 0
+          time-between-eviction-runs: 1000
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smart_travel
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  #    url: jdbc:mysql://localhost:3306/smart_travel?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+  #    username: root
+  #    password: 123456
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 18003
+
+# 可观测性
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  metrics:
+    export:
+      prometheus:
+        include-default-metrics: false

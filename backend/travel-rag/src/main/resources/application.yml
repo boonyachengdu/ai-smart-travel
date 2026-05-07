@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: travel-rag
+    # Spring AI 通义千问配置（最关键）
+  ai:
+    dashscope:
+      api-key: sk-147790c3aaf04f8c95834f4e92f92dc1   # 必须，你的通义千问 API Key
+      chat:
+        options:
+          model: qwen-turbo                         # 或 qwen-max、qwen-plus
+      embedding:
+        options:
+          model: text-embedding-v3                  # M6.1 推荐 v3（1536 维）
+    vectorstore:
+      pgvector:
+        index-type: HNSW           # 使用HNSW索引，查询性能好
+        distance-type: COSINE_DISTANCE  # 余弦距离
+        dimensions: 1536           # 通义千问embedding维度
+        initialize-schema: false    # 首次运行时自动创建表结构，设置为false手动创建
+        remove-existing-vector-store-table: false  # 千万不要设为true！
+        schema-name: public
+        table-name: policy_documents    # 自定义表名
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${server-addr}:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: ${server-addr}:8848
+        file-extension: yaml
+        refresh-enabled: true
+        import-check:
+          enabled: false   # 👈 修正这里
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smart_travel
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    #    url: jdbc:mysql://localhost:3306/smart_travel?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    #    username: root
+    #    password: 123456
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 100
+          max-idle: 8
+          max-wait: -1
+          min-idle: 0
+          time-between-eviction-runs: 1000
+
+
+server:
+  port: 18004

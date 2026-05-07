@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: travel-mcp-server
+  ai:
+    dashscope:
+      api-key: xxxxxx-hsfuihsf-dshfdsf

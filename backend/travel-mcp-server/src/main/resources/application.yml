@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: travel-mcp-server
+  ai:
+    openai:
+      api-key: xxxxxxxxxxxxxxxxxxxxxx
+      chat:
+        options:
+          model: gpt-3.5-turbo
+    dashscope:
+      api-key: sk-147790c3aaf04f8c95834f4e92f92dc1
+      chat:
+        options:
+          # ??????
+          model: qwen-plus                         # ? qwen-max?qwen-plus
+      embedding:
+        options:
+          model: text-embedding-v3
+    mcp:
+      server:
+        name: database-mcp-server
+        version: 1.0.0
+        enabled: true
+        protocol: SSE  # ?? SSE ??
+        sse-endpoint: /api/v1/sse  # SSE ????# M6.1 ?? v3?1536 ??

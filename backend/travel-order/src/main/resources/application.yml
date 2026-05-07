@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: travel-order
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${server-addr}:8848
+        username: nacos
+        password: nacos
+      config:
+        server-addr: ${server-addr}:8848
+        file-extension: yaml
+        refresh-enabled: true
+        import-check:
+          enabled: false   # 👈 修正这里
+  datasource:
+    url:  jdbc:postgresql://localhost:5432/smart_travel
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  main:
+    allow-bean-definition-overriding: true
+#    url: jdbc:mysql://localhost:3306/smart_travel?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: 123456
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 18002
+  tomcat:
+    connection-timeout: 30000
+
+# mybatis-plus 基本配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # 开发阶段打印 sql，生产去掉
+  global-config:
+    db-config:
+      id-type: auto                  # 主键自增
+      logic-delete-field: deleted    # 逻辑删除字段（可选）
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 开启 feign
+#feign:
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 30000  # 连接超时：30 秒
+#        readTimeout: 60000     # 读取超时：60 秒
+#      travel-order:
+#        connectTimeout: 30000
+#        readTimeout: 60000
+#      travel-approval:
+#        connectTimeout: 30000
+#        readTimeout: 60000
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html          # 原生 UI
+  api-docs:
+    path: /v3/api-docs
+
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    enable-swagger-models: true
+    enable-footer: false
+
+logging:
+  level:
+    com.alibaba.nacos: ERROR
+    org.springframework.cloud.client.discovery: ERROR

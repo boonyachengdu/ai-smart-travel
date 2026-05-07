@@ -1,0 +1,197 @@
+spring:
+  application:
+    name: travel-gateway
+  autoconfigure:
+    exclude:
+      # 核心：排除响应式安全自动配置
+      - org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration
+      # 核心：排除响应式管理端安全自动配置（由 actuator 引入）
+      - org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration
+      # 重要：如果您在 pom.xml 中引入了 OAuth2 客户端依赖，也需要排除此项
+      - org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration
+  security:
+    filter-chain: disable
+  config:
+    import:
+      #- optional:classpath:travel-gateway-routes.yml # 本地读取
+      - optional:nacos:travel-gateway-routes.yml # 配置中心读取
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${server-addr}:8848
+      config:
+        server-addr: ${server-addr}:8848
+        file-extension: yaml
+        namespace: ${namespace:public}
+        group: DEFAULT_GROUP
+        refresh: true
+        enabled: true
+        # 扩展配置，支持多个配置文件
+#        extension-configs:
+#            - data-id: travel-gateway-routes.yaml
+#              group: DEFAULT_GROUP
+#              refresh: true
+  #    gateway:
+#      routes:
+#        # 登录路由（最高优先级，单独处理，不依赖其他规则）
+#        - id: login-route
+#          uri: lb://travel-user
+#          order: 1  # 优先级最高，先匹配
+#          predicates:
+#            - Path=/auth/login,/api/auth/login
+#          filters:
+#            - StripPrefix=0  # 不剥离任何前缀，让下游收到完整路径
+#
+#        # 登录路由（最高优先级，单独处理，不依赖其他规则）
+#        - id: logout-route
+#          uri: lb://travel-user
+#          order: 1  # 优先级最高，先匹配
+#          predicates:
+#            - Path=/auth/logout,/api/auth/logout
+#          filters:
+#            - StripPrefix=0  # 不剥离任何前缀，让下游收到完整路径
+#
+#        # 用户管理服务通用路由
+#        - id: user-service
+#          uri: lb://travel-user
+#          order: 2
+#          predicates:
+#            - Path=/user/**,/api/user/**
+#          filters:
+#            - StripPrefix=0  # 不剥离任何前缀，让下游收到完整路径
+#            #- RewritePath=/api/users/(?<segment>.*), /users/${segment}
+#
+#        # 企业管理服务通用路由
+#        - id: company-service
+#          uri: lb://travel-user
+#          order: 2
+#          predicates:
+#            - Path=/company/**,/api/company/**
+#          filters:
+#            - RewritePath=/api/company/(?<segment>.*), /company/${segment}
+#
+#        # 组织机构管理服务通用路由
+#        - id: department-service
+#          uri: lb://travel-user
+#          order: 2
+#          predicates:
+#            - Path=/department/**,/api/department/**
+#          filters:
+#            - RewritePath=/api/department/(?<segment>.*), /department/${segment}
+#
+#        # 员工管理服务通用路由
+#        - id: employee-service
+#          uri: lb://travel-user
+#          order: 2
+#          predicates:
+#            - Path=/employee/**,/api/employee/**
+#          filters:
+#            - RewritePath=/api/employee/(?<segment>.*), /employee/${segment}
+#
+#        # 订单管理服务
+#        - id: order-service
+#          uri: lb://travel-order
+#          order: 3
+#          predicates:
+#            - Path=/order/**,/api/order/**
+#          filters:
+#            - RewritePath=/api/order/(?<segment>.*), /order/${segment}
+#
+#        # 差标管理服务
+#        - id: standard-service
+#          uri: lb://travel-order
+#          order: 3
+#          predicates:
+#            - Path=/standard/**,/api/standard/**
+#          filters:
+#            - RewritePath=/api/standard/(?<segment>.*), /standard/${segment}
+#
+#        # 流程审批服务
+#        - id: approval-service
+#          uri: lb://travel-order
+#          order: 3
+#          predicates:
+#            - Path=/approval/**,/api/approval/**
+#          filters:
+#            - RewritePath=/api/approval/(?<segment>.*), /approval/${segment}
+#
+#        # 提示词管理服务
+#        - id: prompts-service
+#          uri: lb://travel-rag
+#          order: 4
+#          predicates:
+#            - Path=/prompts/**,/api/prompts/**
+#          filters:
+#            - RewritePath=/api/prompts/(?<segment>.*), /prompts/${segment}
+#
+#        # RAG增强检索服务
+#        - id: rag-service
+#          uri: lb://travel-rag
+#          order: 4
+#          predicates:
+#            - Path=/rag/**,/api/rag/**
+#          filters:
+#            - RewritePath=/api/rag/(?<segment>.*), /rag/${segment}
+#
+#        # RAG文件管理服务
+#        - id: ragFile-service
+#          uri: lb://travel-rag
+#          order: 4
+#          predicates:
+#            - Path=/rag-file/**,/api/rag-file/**
+#          filters:
+#            - RewritePath=/api/rag-file/(?<segment>.*), /rag-file/${segment}
+#
+#        # 对话管理服务
+#        - id: dialog-service
+#          uri: lb://travel-dialog
+#          order: 5
+#          predicates:
+#            - Path=/dialog/**,/api/dialog/**
+#          filters:
+#            - RewritePath=/api/dialog/(?<segment>.*), /dialog/${segment}
+#
+#        # 会话管理服务
+#        - id: session-service
+#          uri: lb://travel-dialog
+#          order: 5
+#          predicates:
+#            - Path=/session/**,/api/session/**
+#          filters:
+#            - RewritePath=/api/session/(?<segment>.*), /session/${segment}
+
+  data:
+    redis:
+      host: ${server-addr}
+      port: 6379
+
+server:
+  port: 9000
+
+# JWT 配置
+jwt:
+  secret: HPJigY187DIyTDySldz1rCJSfZTe2H+Hr8cFc8G7yqc=
+  white-list:
+    - /auth/**
+    - /public/**
+    - /actuator/**
+    - /swagger-ui/**
+    - /v3/api-docs/**
+  logout-path: /auth/logout
+
+logging:
+  level:
+    com.alibaba.nacos: ERROR
+    org.springframework.cloud.client.discovery: ERROR
+
+front-end:
+  allowedOrigins: http://localhost:5173,http://localhost:5174
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway,health,info   # 暴露 gateway 端点
+  endpoint:
+    gateway:
+      enabled: true                     # 确保 gateway 端点启用

@@ -1,0 +1,169 @@
+# Gateway 路由配置
+spring:
+  cloud:
+    gateway:
+      routes:
+        # 注册路由（最高优先级，单独处理，不依赖其他规则）
+        - id: login-route
+          uri: lb://travel-user
+          order: 1
+          predicates:
+            - Path=/auth/register,/api/auth/register
+          filters:
+            - StripPrefix=0
+        # 登录路由（最高优先级，单独处理，不依赖其他规则）
+        - id: login-route
+          uri: lb://travel-user
+          order: 1
+          predicates:
+            - Path=/auth/login,/api/auth/login
+          filters:
+            - StripPrefix=0
+
+        # 登出路由（需要验证 token）
+        - id: logout-route
+          uri: lb://travel-user
+          order: 1
+          predicates:
+            - Path=/auth/logout,/api/auth/logout
+          filters:
+            - StripPrefix=0
+        # 验证码路由
+        - id: logout-route
+          uri: lb://travel-user
+          order: 1
+          predicates:
+            - Path=/auth/captcha,/api/auth/captcha
+          filters:
+            - StripPrefix=0
+        # 验证码验证路由
+        - id: logout-route
+          uri: lb://travel-user
+          order: 1
+          predicates:
+            - Path=/auth/verify-captcha,/api/auth/verify-captcha
+          filters:
+            - StripPrefix=0
+        # 用户管理服务通用路由
+        - id: user-service
+          uri: lb://travel-user
+          order: 2
+          predicates:
+            - Path=/users/**,/api/users/**
+          filters:
+            - StripPrefix=0
+
+        # 企业管理服务通用路由
+        - id: company-service
+          uri: lb://travel-user
+          order: 2
+          predicates:
+            - Path=/company/**,/api/company/**
+          filters:
+            - RewritePath=/api/company/(?<segment>.*), /company/${segment}
+
+        # 组织机构管理服务通用路由
+        - id: department-service
+          uri: lb://travel-user
+          order: 2
+          predicates:
+            - Path=/department/**,/api/department/**
+          filters:
+            - RewritePath=/api/department/(?<segment>.*), /department/${segment}
+
+        # 员工管理服务通用路由
+        - id: employee-service
+          uri: lb://travel-user
+          order: 2
+          predicates:
+            - Path=/employee/**,/api/employee/**
+          filters:
+            - RewritePath=/api/employee/(?<segment>.*), /employee/${segment}
+
+        # 订单管理服务
+        - id: order-service
+          uri: lb://travel-order
+          order: 3
+          predicates:
+            - Path=/order/**,/api/order/**
+          filters:
+            - RewritePath=/api/order/(?<segment>.*), /order/${segment}
+
+        # 差标管理服务
+        - id: standard-service
+          uri: lb://travel-dialog
+          order: 3
+          predicates:
+            - Path=/standard/**,/api/standard/**
+          filters:
+            - RewritePath=/api/standard/(?<segment>.*), /standard/${segment}
+
+        # 流程审批服务
+        - id: approval-service
+          uri: lb://travel-approval
+          order: 5
+          predicates:
+            - Path=/approval/**,/api/approval/**
+          filters:
+            - RewritePath=/api/approval/(?<segment>.*), /approval/${segment}
+
+        # 提示词管理服务
+        - id: prompts-service
+          uri: lb://travel-rag
+          order: 4
+          predicates:
+            - Path=/prompts/**,/api/prompts/**
+          filters:
+            - RewritePath=/api/prompts/(?<segment>.*), /prompts/${segment}
+
+        # RAG 增强检索服务
+        - id: rag-service
+          uri: lb://travel-rag
+          order: 4
+          predicates:
+            - Path=/rag/**,/api/rag/**
+          filters:
+            - RewritePath=/api/rag/(?<segment>.*), /rag/${segment}
+
+        # RAG文件记录
+        - id: ragFile-service
+          uri: lb://travel-rag
+          order: 4
+          predicates:
+            - Path=/rag-file/**,/api/rag-file/**
+          filters:
+            - RewritePath=/api/rag-file/(?<segment>.*), /rag-file/${segment}
+        # 差旅政策服务
+        - id: policy-service
+          uri: lb://travel-rag
+          order: 4
+          predicates:
+            - Path=/policy/**,/api/policy/**
+          filters:
+            - RewritePath=/api/policy/(?<segment>.*), /policy/${segment}
+        # 对话管理服务
+        - id: dialog-service
+          uri: lb://travel-dialog
+          order: 5
+          predicates:
+            - Path=/dialog/**,/api/dialog/**
+          filters:
+            - RewritePath=/api/dialog/(?<segment>.*), /dialog/${segment}
+
+        # 会话管理服务
+        - id: session-service
+          uri: lb://travel-dialog
+          order: 5
+          predicates:
+            - Path=/session/**,/api/session/**
+          filters:
+            - RewritePath=/api/session/(?<segment>.*), /session/${segment}
+
+        # 渠道模拟服务
+        - id: channel-service
+          uri: lb://travel-channel
+          order: 5
+          predicates:
+            - Path=/mock/**,/api/mock/**
+          filters:
+            - RewritePath=/api/mock/(?<segment>.*), /mock/${segment}
