@@ -1,19 +1,19 @@
 <template>
   <div class="message-input">
     <van-field
-        v-model="inputText"
-        type="textarea"
-        rows="2"
-        autosize
-        placeholder="问我任何差旅问题..."
-        @keyup.enter="sendText"
+      v-model="inputText"
+      type="textarea"
+      rows="2"
+      autosize
+      :placeholder="placeholderText"
+      @keyup.enter="handleSend"
     >
       <template #button>
         <van-button
-            type="primary"
-            size="small"
-            :loading="sending"
-            @click="sendText"
+          type="primary"
+          size="small"
+          :loading="sending"
+          @click="handleSend"
         >
           发送
         </van-button>
@@ -22,118 +22,63 @@
 
     <div class="tools">
       <van-uploader
-          v-model="fileList"
-          :max-count="1"
-          :max-size="10 * 1024 * 1024"
-          accept=".txt,.pdf,.doc,.docx,.xls,.xlsx"
-          :before-read="beforeUpload"
-          :after-read="afterUpload"
+        v-model="fileList"
+        :max-count="1"
+        :max-size="10 * 1024 * 1024"
+        accept=".txt,.pdf,.doc,.docx,.xls,.xlsx"
+        :before-read="beforeUpload"
+        :after-read="afterUpload"
       >
         <van-icon name="attachment" size="24" />
       </van-uploader>
 
       <van-icon
-          name="microphone"
-          size="24"
-          :color="isRecording ? 'red' : '#666'"
-          @click="toggleVoice"
+        name="microphone"
+        size="24"
+        :color="isRecording ? 'red' : '#666'"
+        @click="toggleVoice"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useChatStore } from '@/stores/chatStore'
+import { ref, computed } from 'vue'
 import request from '@/utils/request'
 import { showToast } from 'vant'
-import {useRoute} from "vue-router";
+import { useRoute } from 'vue-router'
 
-const chatStore = useChatStore()
+const emit = defineEmits<{
+  send: [content: string]
+  uploadSuccess: [filename: string]
+}>()
+
+const route = useRoute()
+const sceneValue = (route.params.scene as string) || 'default'
+
 const inputText = ref('')
 const sending = ref(false)
 const fileList = ref([])
 const isRecording = ref(false)
 let mediaRecorder: MediaRecorder | null = null
 
-// 关键变量：首次发送时创建新会话
-const isFirstSend = ref(true)
+const placeholderText = computed(() => {
+  const map: Record<string, string> = {
+    default: '问我任何差旅问题...（Agent 模式）',
+    flight: '输入您的机票需求...',
+    hotel: '输入您的酒店需求...',
+    train: '输入您的火车票需求...',
+    car: '输入您的用车需求...',
+  }
+  return map[sceneValue] || '问我任何差旅问题...'
+})
 
-const route = useRoute()
-const sceneValue = (route.params.scene as string) || 'default'
-
-const sendText = async () => {
+const handleSend = () => {
   if (!inputText.value.trim()) return
 
-  const msg = {
-    role: 'user' as const,
-    content: inputText.value.trim(),
-  }
-  chatStore.addMessage(msg)
-
-  sending.value = true
+  const content = inputText.value.trim()
   inputText.value = ''
-
-  try {
-    const payload = {
-      userInput: msg.content,
-      newSession: isFirstSend.value,
-      scene: sceneValue.toUpperCase(),
-      // 如果已有 sessionId，可在此添加（当前后端会自动管理）
-      // sessionId: chatStore.sessionId || undefined,
-    }
-
-    const res = await request.post('/dialog/chat/session', payload)
-
-    // 打印完整返回，便于调试（可上线后删除）
-    console.log('对话返回完整结构：', JSON.stringify(res, null, 2))
-
-    // 解析后端返回的 response
-    const response = res.data?.response || {}
-
-    let replyContent = '暂无回复'
-
-    if (response.status === 'clarify' && response.clarifyQuestions?.length > 0) {
-      // 澄清问题：格式化为列表
-      replyContent = '请补充以下信息：\n' +
-          response.clarifyQuestions.map(q => `- ${q}`).join('\n')
-    } else if (response.status === 'complete' && response.order) {
-      // 订单生成成功
-      replyContent = `订单已生成！\n` +
-          `订单号：${response.order.orderNo || '生成中'}\n` +
-          `金额：¥${response.order.amount || '待确认'}\n` +
-          `状态：${response.order.status || '待支付'}`
-    } else if (response.status === 'violation') {
-      // 违规
-      replyContent = `订单违反差标规则：${response.violationReason || '具体原因未知'}`
-    } else if (response.message) {
-      // 默认文本回复
-      replyContent = response.message
-    } else {
-      // 兜底：字符串化整个 response
-      replyContent = JSON.stringify(response, null, 2)
-    }
-
-    chatStore.addMessage({
-      role: 'assistant',
-      content: replyContent
-    })
-
-    // 第一次发送成功后，标记为 false（后续都续会话）
-    isFirstSend.value = false
-  } catch (err: any) {
-    console.error('对话请求失败', err)
-    let errMsg = '抱歉，服务异常，请稍后再试'
-    if (err.response?.data?.message) {
-      errMsg = err.response.data.message
-    }
-    chatStore.addMessage({
-      role: 'assistant',
-      content: errMsg
-    })
-  } finally {
-    sending.value = false
-  }
+  emit('send', content)
 }
 
 const beforeUpload = (file: File) => {
@@ -161,7 +106,7 @@ const afterUpload = async (fileItem: any) => {
     })
 
     if (res.success) {
-      inputText.value = `已上传文件：${file.name}，请问相关问题`
+      emit('uploadSuccess', file.name)
     }
   } catch (err) {
     showToast('文件上传失败')

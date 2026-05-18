@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="travel-user" />
+        <module name="travel-order" />
+        <module name="travel-mcp-server" />
+        <module name="travel-dialog" />
+        <module name="travel-rag" />
+        <module name="travel-cache" />
+        <module name="travel-gateway" />
+        <module name="travel-feign" />
+        <module name="travel-channel" />
+        <module name="travel-approval" />
+        <module name="travel-common" />
+        <module name="travel-mcp-client" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="17">
+      <module name="ai-smart-travel" target="" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
